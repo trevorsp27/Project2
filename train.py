@@ -15,7 +15,7 @@ def train_model(model, train_loader, val_loader, pad_token_id, epochs=30, patien
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=2)
 
     for epoch in range(epochs):
-        # Training loop
+        #training loop
         model.train()
         train_loss = 0.0
         with tqdm(train_loader, desc=f"Epoch {epoch+1}/{epochs} (Train)", unit="batch") as tepoch:
@@ -32,7 +32,7 @@ def train_model(model, train_loader, val_loader, pad_token_id, epochs=30, patien
         train_loss /= len(train_loader)
         train_losses.append(train_loss)
 
-        # Validation loop with progress bar
+        #validation loop with progress bar
         model.eval()
         val_loss = 0.0
         with tqdm(val_loader, desc=f"Epoch {epoch+1}/{epochs} (Val)", unit="batch") as vepoch:
@@ -47,7 +47,7 @@ def train_model(model, train_loader, val_loader, pad_token_id, epochs=30, patien
         val_loss /= len(val_loader)
         val_losses.append(val_loss)
 
-        # Early stopping and checkpointing
+        #early stopping and checkpointing
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
@@ -86,10 +86,10 @@ def save_loss_curves(model_name, train_losses, val_losses, save_dir="."):
         val_losses (list): List of validation losses for each epoch.
         save_dir (str): Directory to save the loss curve plot.
     """
-    # Create the save directory if it doesn't exist
+    #create the save directory if it doesn't exist
     os.makedirs(save_dir, exist_ok=True)
 
-    # Plot the loss curves
+    #plot the loss curves
     plt.figure(figsize=(10, 6))
     plt.plot(train_losses, label="Training Loss", color="blue")
     plt.plot(val_losses, label="Validation Loss", color="orange")
@@ -99,7 +99,6 @@ def save_loss_curves(model_name, train_losses, val_losses, save_dir="."):
     plt.legend()
     plt.grid(True)
 
-    # Save the plot
     save_path = os.path.join(save_dir, f"{model_name}_loss_curve.png")
     plt.savefig(save_path)
     plt.close()

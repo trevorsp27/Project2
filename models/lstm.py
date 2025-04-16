@@ -23,7 +23,7 @@ class LSTMModel(nn.Module):
             #return logits during training
             return logits
     
-    def prompt(self, prompt, tokenizer, max_length=50, temperature=1.0, device="cpu"):
+    def prompt(self, prompt, tokenizer, max_length=50, temperature=0.7, device="cpu"):
         self.eval()
         input_ids = torch.tensor(tokenizer.encode(prompt), dtype=torch.long).unsqueeze(0).to(device)
         generated_tokens = []
@@ -35,10 +35,11 @@ class LSTMModel(nn.Module):
                 next_token_id = torch.argmax(next_token_logits, dim=-1).item()
                 generated_tokens.append(next_token_id)
 
+                #stop if EOS token is generated
                 if next_token_id == tokenizer.eos_id():
                     break
 
-                # Append the new token and ensure it's on the same device
+                #append the predicted token
                 input_ids = torch.cat([input_ids, torch.tensor([[next_token_id]], dtype=torch.long).to(device)], dim=1)
 
         return tokenizer.decode(generated_tokens)

@@ -47,9 +47,9 @@ def calculate_bleu(model, test_examples, tokenizer, device="cpu"):
             print(f"Processing example {i}/{len(test_examples)}")
         
         prompt = example["prompt"]
-        ground_truth_tokens = example["completion"]  # Already tokenized
+        ground_truth_tokens = example["completion"] 
 
-        # Generate text using the model
+        #generate text using the model
         generated = model.prompt(
             prompt,
             tokenizer,
@@ -58,15 +58,15 @@ def calculate_bleu(model, test_examples, tokenizer, device="cpu"):
             device=device
         )
         
-        # Tokenize the generated text
+        #tokenize the generated text
         candidate_tokens = tokenizer.encode(generated, out_type=str)
 
-        # Debugging: Print the first example's reference and candidate
+        #print the first example's reference and candidate
         if i == 0:
             print("Example Reference:", [ground_truth_tokens])
             print("Example Candidate:", candidate_tokens)
 
-        references.append([ground_truth_tokens])  # NLTK expects list of references
+        references.append([ground_truth_tokens])  #NLTK expects list of references
         candidates.append(candidate_tokens)
 
     print("Calculating BLEU score...")
